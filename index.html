@@ -1,0 +1,220 @@
+<html>
+<head>
+<title>Typo</title>
+<style>
+	*{padding:0; margin:0;box-sizing: border-box;
+		font-family: sans-serif;}
+	
+	.mainDiv{
+		width:100%;
+		height:100%;
+		position:relative;
+		min-height: 100vh;
+		
+	}
+	.navbar{
+		height:100px;
+		position:relative;
+	}
+	.navbar h3 {
+		position: absolute;
+		top:50%;
+		left:50%;
+		transform: translate(-50%,-50%);
+	}
+	.navbar h3 span{
+		font-weight: bolder;
+	}
+	.centerDiv{
+		margin-top: 10px;
+		height:calc(100vh-100px);
+		display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    flex-direction: column;
+	    transition: 0.5s;
+	}
+
+	.centerDiv h6{
+		font-size: 1em;
+		letter-spacing: 2px;
+	}
+
+	.centerDiv h1{
+		
+		font-size: 4em;
+		letter-spacing: 2px;
+		font-weight: bolder;
+	}
+	.centerDiv h2{
+		margin-top: 2em;
+		font-size: 1.2em;
+		width:40%;
+		font-weight: bolder;
+		text-align:center;
+	}
+	textarea{
+		margin-top: 0.5em;
+		font-size: 1.5em;
+		border-radius: 10px;
+		outline: none;
+		border:none;
+		padding: 1em;
+		box-shadow: 0 9px 24px rgba(0, 0, 0, 0.12), 0 9px 24px rgba(0, 0, 0, 0.12);
+	}
+	button{
+		background: yellow;
+		width:50%;
+		font-size: 1.5em;
+		font-weight: bolder;
+		letter-spacing: 2px;
+		cursor: pointer;
+		padding: 10px;
+		outline: none;
+		border:none;
+		text-decoration: none;
+	}
+
+	#blur.active{
+		filter:blur(50px);
+	}
+	
+	#popup{
+		position: fixed;
+		top:40%;
+		left:50%;
+		transform: translate(-50%,-50%);
+		width:600px;
+		padding: 50px;
+		background-color: white;
+		visibility: hidden;
+		box-shadow: 0 9px 24px rgba(0, 0, 0, 0.12), 0 9px 24px rgba(0, 0, 0, 0.12);
+		
+	}
+	#popup.active{
+		visibility: visible;
+		opacity: 1;
+		
+	}
+</style>
+</head>
+<body>
+	<div class="mainDiv" id="blur">
+		<div class="navbar">
+			<h3>TECH<span>TYPO</span></h3>
+			
+		</div>
+		<hr>
+		<div class="centerDiv" >
+			
+			<h6>Typing Speed Test</h6>
+
+			<h1>Test Your Typing Speed</h1>
+			<h2 id="msg"></h2>
+			<textarea id="mywords" cols="50" rows="5" placeholder="Type fast....."></textarea>
+			<br>
+			<button id="btn" class="mainbtn">Start</button>
+			
+		</div>
+
+	</div>
+	<div id="popup">
+				<h2 id="msg1"></h2>
+			<a href="https://typing12s.netlify.app/"><button >Restart</button></a>
+			</div>
+
+	<script>
+
+
+
+
+		const words=["A late 20th century trend in typing, primarily used with devices with small keyboards (such as PDAs and Smartphones), is thumbing or thumb typing. This can be accomplished using one or both thumbs. Similar to desktop keyboards and input devices.","Word processors evolved dramatically once they became software programs rather than dedicated machines. They can usefully be distinguished from text editors, the category of software they evolved from. Word processing added to the text editor","Functions now taken for granted were added incrementally, sometimes by purchase of independent providers of add-on programs. Spell checking, grammar checking and mail merge were some of the most popular add-ons for early word processors.","Later desktop publishing programs were specifically designed with elaborate pre-formatted layouts for publication, offering only limited options for changing the layout, while allowing users to import text that was written using a text editor","Income before securities transactions was up 10.8 percent from $13.49 million in 1982 to $14.95 million in 1983. Earnings per share (adjusted for a 10.5 percent stock dividend distributed on August 26) advanced 10 percent to $2.39 in 1983 from $2.17 in 1982.","Earnings may rise for 7 years. Hopefully, earnings per share will grow another 10 percent. Kosy, Klemin, and Bille began selling on May 23, 1964. Their second store was founded in Renton on August 3, from 1964 to 1984"];
+
+
+
+
+
+
+
+
+
+
+		const msg=document.getElementById('msg');
+		const typewords=document.getElementById('mywords');
+		const btn=document.getElementById('btn');
+		let startTime,endTime;
+
+		const playGame=()=>{
+			let randomNumber=Math.floor(Math.random()*words.length);
+			msg.innerText=words[randomNumber];
+			let date=new Date();
+			startTime=date.getTime();
+			btn.innerText="Done";
+		}
+
+		const endPlay=()=>{
+			let date=new Date();
+			endTime=date.getTime();
+			let totalTime=((endTime-startTime)/1000);
+			let totalstr=typewords.value;
+			let wordCount=wordCounter(totalstr);
+			let speed=Math.round((wordCount/totalTime)*60);
+			let time=0;
+			let unit="";
+			if(Math.floor(totalTime)<60){
+				time=Math.floor(totalTime);
+				unit="second";
+			}
+			else{
+				time=Math.floor(totalTime/60);
+				unit="minutes"
+			}
+			let finalmsg="You typed at "+speed+" speed per minutes and time taken is "+time+" "+unit;
+			finalmsg+=compareWords(msg.innerText,totalstr);
+			msg1.innerText=finalmsg;
+			var blur=document.getElementById('blur');
+			blur.classList.toggle('active');
+
+			var popup=document.getElementById('popup');
+			popup.classList.toggle('active');
+		}
+
+		const compareWords=(str1,str2)=>{
+			let word1=str1.split(" ");
+			let word2=str2.split(" ");
+			let cnt=0;
+			for(let i=0;i<word2.length;i++){
+				if(word1[i]==word2[i]){
+					cnt++;
+				}
+			}
+			// word1.forEach(function(item,index){
+			// 	if(item==word2[index]){
+			// 		cnt++;
+			// 	}
+			// })
+			let errorWords=(word1.length-cnt);
+			return (". "+cnt+" correct out of "+word1.length+ " words and the total numner of errors are "+errorWords+".");
+
+		}
+		const wordCounter=(str)=>{
+			let response=str.split(" ").length;
+			return response;
+		}
+
+		
+		btn.addEventListener('click',function(){
+			if(this.innerText=="Start"){
+				typewords.disabled=false;
+				playGame();
+			}
+			else if(this.innerText=="Done"){
+				typewords.disabled=true;
+				btn.innerText="Start";
+				endPlay();
+			}
+		})
+	</script>
+
+</body>
+</html>
